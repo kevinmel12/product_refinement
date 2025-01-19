@@ -5,29 +5,28 @@ import "./styles/global.css";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
 
-  const handleImport = async () => {
+  const handleImport = () => {
     setLoading(true);
-    setStatus("loading");
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      setStatus("success");
-      setTimeout(() => setLoading(false), 2000);
-    } catch {
-      setStatus("error");
-      setTimeout(() => setLoading(false), 2000);
-    }
+    // Simule une tâche
+    setTimeout(() => {
+      setLoading(false); // Cacher la popup après 2s
+    }, 2000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">Prototype</h1>
-      <Form onImport={handleImport} />
-      <LoadingDialog status={status} visible={loading} />
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="dialog">
+        <h1 className="title">Prototype</h1>
+        <Form onSubmit={handleImport} />
+      </div>
+      {loading && (
+        <LoadingDialog
+          message="Data processing in progress..."
+          isVisible={loading}
+        />
+      )}
     </div>
   );
 };

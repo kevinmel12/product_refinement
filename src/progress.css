@@ -1,0 +1,17 @@
+.progress-bar {
+    height: 100%;
+    width: 0%; /* La barre commence à 0% */
+    background-color: #0F172A; /* Couleur identique au bouton */
+    border-radius: 9999px; /* Coins arrondis */
+    animation: progressAnimation 900ms ease-out forwards; /* Animation fluide */
+  }
+  
+  @keyframes progressAnimation {
+    from {
+      width: 0%; /* Départ à 0% */
+    }
+    to {
+      width: 100%; /* Arrive à 100% */
+    }
+  }
+  

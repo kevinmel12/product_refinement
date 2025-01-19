@@ -1,18 +1,23 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 
-interface ProgressProps {
-  value: number;
-  className?: string;
-}
+export const Progress: React.FC = () => {
+  const [progress, setProgress] = useState(0);
 
-export function Progress({ value, className }: ProgressProps) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setProgress(100); // Remplir à 100% avec une animation
+    }, 10);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className={cn("relative w-full h-2 bg-gray-200 rounded", className)}>
+    <div className="progress-bar-container">
       <div
-        className="absolute top-0 left-0 h-full bg-blue-500 rounded"
-        style={{ width: `${value}%` }}
+        className="progress-bar"
+        style={{
+          width: `${progress}%`,
+        }}
       ></div>
     </div>
   );
-}
+};
