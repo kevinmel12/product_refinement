@@ -1,51 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { DayPicker } from "react-day-picker";
+import { DateRange } from "react-day-picker";
+import "react-day-picker/dist/style.css";
 
-const Form: React.FC = () => {
-  const [apiKey, setApiKey] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+interface FormProps {
+  onImport: () => void;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('API Key:', apiKey, 'Start Date:', startDate, 'End Date:', endDate);
-  };
+const Form: React.FC<FormProps> = ({ onImport }) => {
+  const [apiKey, setApiKey] = useState("");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [showPicker, setShowPicker] = useState(false);
 
   return (
-    <form onSubmit={handleSubmit} className="p-4">
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">API Key</label>
-        <input
-          type="text"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        />
+    <div className="bg-white rounded-lg shadow-lg p-6 w-[400px]">
+      <label className="block text-lg font-medium mb-2">API key</label>
+      <Input
+        placeholder="Enter your API key : Amplitude, Mixpanel..."
+        value={apiKey}
+        onChange={(e) => setApiKey(e.target.value)}
+      />
+
+      <div className="mt-4">
+        <label className="block text-lg font-medium mb-2">Pick a date</label>
+        <div
+          className="relative"
+          onClick={() => setShowPicker((prev) => !prev)}
+        >
+          <Input
+            placeholder="Select the date range for data import"
+            value={
+              dateRange?.from
+                ? `${dateRange.from.toLocaleDateString()} - ${
+                    dateRange.to?.toLocaleDateString() || ""
+                  }`
+                : ""
+            }
+            readOnly
+          />
+          {showPicker && (
+            <div className="absolute bg-white shadow-lg rounded-lg mt-2 z-10">
+              <DayPicker
+                mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
+              />
+            </div>
+          )}
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Start Date</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">End Date</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+
+      <Button
+        className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white"
+        onClick={onImport}
       >
-        Submit
-      </button>
-    </form>
+        Import data
+      </Button>
+    </div>
   );
 };
 

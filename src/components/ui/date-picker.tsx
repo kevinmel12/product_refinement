@@ -1,31 +1,21 @@
-import * as React from "react";
-import { Calendar } from "./calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Button } from "./button";
+import React from "react";
+import { DayPicker, DateRange } from "react-day-picker";
+import "react-day-picker/dist/style.css";
 
-export interface DatePickerProps {
-  id: string;
-  selected: Date | null;
-  onSelect: (date: Date | null) => void;
+interface DatePickerProps {
+  selected: DateRange | undefined;
+  onSelect: (range: DateRange | undefined) => void;
+  className?: string;
 }
 
-export const DatePicker: React.FC<DatePickerProps> = ({ id, selected, onSelect }) => {
-  const [open, setOpen] = React.useState(false);
-
+export const DatePicker: React.FC<DatePickerProps> = ({ selected, onSelect, className }) => {
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button id={id} variant="outline">
-          {selected ? selected.toDateString() : "Pick a date"}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <Calendar
-          mode="single"
-          selected={selected || undefined}
-          onSelect={(date) => onSelect(date || null)}
-        />
-      </PopoverContent>
-    </Popover>
+    <DayPicker
+      mode="range"
+      selected={selected}
+      onSelect={onSelect}
+      className={className}
+      numberOfMonths={1}
+    />
   );
 };
